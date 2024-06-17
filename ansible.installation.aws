@@ -1,56 +1,75 @@
-Step 1 — Install the latest version of a packages
-sudo hostnamectl set-hostname controlnode ---> to change hostname to controlnode 
+#installation process of ansible-server 
 
-sudo yum update -y 
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
-Step 2  - to install ansible 
+yum install epel-release-latest-7.noarch.rpm -y 
 
-sudo amazon-linux-extras install ansible2 -y
+yum update -y 
 
-Step 3– Check Ansible Version 
 
-ansible --version 
+yum install git python python-level python.pip openssl ansible -y 
 
-/etc/ansible/ansible.cfg ---> configfile 
+ansible --version #to check ansible installed or not 
 
-vim /etc/ansible/hosts 
+vi /etc/ansible/hosts #below line number 11 add one group and ip addresses 
 
-enter private ip of managed node line number 25 
+[demo]
+private ip of node-1 
+private ip of node-2 
 
-ansible all -m ping
+vi /etc/ansible/ansible.cfg  #do few changes in this file 
 
-ansible localhost -m ping 
+Uncomment
+#inventory = /etc/ansible/hosts
+# sudo-user = root 
 
-ansible all --list-hosts
+Now create one user, in all the three instances 
 
-sudo hostnamectl set-hostname controlnode ---> to change hostname to controlnode 
+adduser ansible  
 
-bash ---> to update 
+passwd ansible #give password to in machine 
+
+visudo #line number 101 add ansible user in all node
+
+ansible ALL=(ALL) NOPASSWD: ALL 
+
+vi /etc/ssh/sshd_config   #do it in all service node and other node 
+
+uncomment 
+
+PermitRootLogin yes        #line number 38
+PasswordAuthentication yes     #line number 61 
+
+comment 
+
+#PasswordAuthentication no  # line number 63 
+
+service sshd restart 
+
+su - ansible # in all node
+
+ssh <private of node> # we can access node 
+
+Now go to ansible server and create keys 
+
+user ansible ] ssh-keygen 
 
 cd .ssh 
 
-manage node 
+ssh-copy-id ansible@<private ip of node> 
 
-vim /etc/ssh/sshd_config 
+enter passwor of node ansible user 
 
-1 uncomment ----> remobve # 
+ansible all --list-hosts  # to check hosts 
 
-63 comment ----> comment means #
+ansible demo --list-hosts # to check groups 
 
+Ad-hoc Commands
 
-systemctl restart sshd 
+ansible demo -a "ls" 
 
-passwd ec2-user 
-
-go into into control node 
-
-cd .ssh 
-
-sudo ssh-copy-id -f ec2-user@<privateip> ----> of manage node 
-
-ansible all -m yum -a "name=git" -b 
+ansible all -a "ls" 
 
 
-
-
+ansible demo -a "sudo yum install httpd -y"
 

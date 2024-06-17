@@ -73,3 +73,4 @@ ansible all -a "ls"
 
 ansible demo -a "sudo yum install httpd -y"
 
+ansible demo -ba "yum remove httpd -y"   #we can use ba to avoid sudo 

@@ -1,5 +1,7 @@
 #installation process of ansible-server 
 
+hostnamectl set-hostname control # to set host name 
+
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 yum install epel-release-latest-7.noarch.rpm -y 

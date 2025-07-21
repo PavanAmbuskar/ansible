@@ -1,0 +1,12 @@
+- name: Full DevOps stack setup
+  hosts: web
+  become: yes
+
+  roles:
+    - common
+    - docker
+    - nginx
+    - jenkins
+    - prometheus
+    - grafana
+

@@ -1,0 +1,24 @@
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Copy Nginx reverse proxy config
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Ensure Nginx is started and enabled on boot
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Reload Nginx to apply config
+  service:
+    name: nginx
+    state: reloaded

@@ -1,0 +1,23 @@
+- name: Install Docker dependencies
+  apt:
+    name: [apt-transport-https, ca-certificates, curl]
+    state: present
+
+- name: Add Docker GPG key
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+- name: Add Docker repo
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    state: latest
+
+- name: Enable Docker service
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
